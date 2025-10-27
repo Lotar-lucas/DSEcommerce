@@ -25,15 +25,15 @@ public class User {
 
   private String email;
 
-
   private String phone;
 
   private LocalDate birthday;
 
+  private String password;
+
   @OneToMany(mappedBy = "client")
   private List<Order> orders = new ArrayList<>();
 
-//  private xxx roles[];
 
   public  User() {
   }
@@ -78,6 +78,14 @@ public class User {
 
   public void setBirthday(LocalDate birthday) {
     this.birthday = birthday;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public List<Order> getOrders() {
