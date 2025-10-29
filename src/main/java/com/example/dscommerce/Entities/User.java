@@ -31,13 +31,17 @@ public class User {
 
   private String password;
 
+  private LocalDate birthDate;
+
   @OneToMany(mappedBy = "client")
   private List<Order> orders = new ArrayList<>();
 
   public  User() {
   }
 
-  public User(Long id, String name, String email, String phone, LocalDate birthday) {}
+  public User(Long id, String name, String email, String phone, LocalDate birthday, LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
 
   public Long getId() {
     return id;
@@ -71,14 +75,6 @@ public class User {
     this.phone = phone;
   }
 
-  public LocalDate getBirthday() {
-    return birthday;
-  }
-
-  public void setBirthday(LocalDate birthday) {
-    this.birthday = birthday;
-  }
-
   public String getPassword() {
     return password;
   }
@@ -91,4 +87,11 @@ public class User {
     return orders;
   }
 
+  public LocalDate getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
 }
