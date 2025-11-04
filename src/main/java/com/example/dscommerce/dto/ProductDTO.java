@@ -1,6 +1,6 @@
 package com.example.dscommerce.dto;
 
-import com.example.dscommerce.Entities.Product;
+import com.example.dscommerce.entities.Product;
 
 public class ProductDTO {
 
@@ -20,6 +20,7 @@ public class ProductDTO {
     this.imgUrl = imgUrl;
   }
 
+  //Sobrecarga do construtor
   public ProductDTO(Product entity) {
     id = entity.getId();
     name = entity.getName();

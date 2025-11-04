@@ -1,4 +1,4 @@
-package com.example.dscommerce.Entities;
+package com.example.dscommerce.entities;
 
 public enum OrderStatus {
   WAITING_PAYMENT,

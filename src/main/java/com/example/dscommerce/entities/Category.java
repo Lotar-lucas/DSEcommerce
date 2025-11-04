@@ -1,4 +1,4 @@
-package com.example.dscommerce.Entities;
+package com.example.dscommerce.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
