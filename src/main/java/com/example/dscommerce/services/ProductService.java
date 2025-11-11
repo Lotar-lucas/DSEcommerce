@@ -3,9 +3,13 @@ package com.example.dscommerce.services;
 import com.example.dscommerce.entities.Product;
 import com.example.dscommerce.dto.ProductDTO;
 import com.example.dscommerce.repositories.ProductRepository;
+import com.example.dscommerce.services.exceptions.DatabaseException;
+import com.example.dscommerce.services.exceptions.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,8 +26,9 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public ProductDTO findById(Long id){
-    Optional<Product> result = productRepository.findById(id);
-    Product product = result.get();
+    Product product = productRepository.findById(id).orElseThrow(
+      ()-> new ResourceNotFoundException("Product not found")
+    );
     return new ProductDTO(product);
   };
 
@@ -43,11 +48,14 @@ public class ProductService {
 
   @Transactional
   public ProductDTO update(Long id, ProductDTO productDTO) {
-
-    Product entity = productRepository.getReferenceById(id);
-    copyDtoToEntity(productDTO, entity);
-    entity = productRepository.save(entity);
-    return new ProductDTO(entity);
+    try {
+      Product entity = productRepository.getReferenceById(id);
+      copyDtoToEntity(productDTO, entity);
+      entity = productRepository.save(entity);
+      return new ProductDTO(entity);
+    } catch (Exception e) {
+      throw new ResourceNotFoundException("Product not found");
+    }
   }
 
   private void copyDtoToEntity(ProductDTO productDTO, Product entity) {
@@ -58,9 +66,17 @@ public class ProductService {
     entity.setImgUrl(productDTO.getImgUrl());
   }
 
-  @Transactional
+  @Transactional(propagation = Propagation.SUPPORTS)
   public void delete(Long id) {
-    productRepository.deleteById(id);
-  }
 
+    if(!productRepository.existsById(id)){
+      throw new ResourceNotFoundException("Product not found");
+    }
+
+    try {
+      productRepository.deleteById(id);
+    } catch (DataIntegrityViolationException e) {
+      throw new DatabaseException("Referential integrity failure");
+    }
+  }
 }
