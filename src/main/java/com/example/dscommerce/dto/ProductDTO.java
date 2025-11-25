@@ -1,16 +1,26 @@
 package com.example.dscommerce.dto;
 
 import com.example.dscommerce.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
 
   private Long id;
+
+  @Size(min = 3, max = 80, message = "Field name must have between 3 and 80 characters")
+  @NotBlank(message = "Field name is required")
   private String name;
+
+  @Size(min = 10, message = "Field description must have at least 10 characters")
+  @NotBlank(message = "Field description is required")
   private String description;
+
+  @Positive(message = "Field price must be positive")
   private Double price;
   private String imgUrl;
-
-  public  ProductDTO() {}
 
   public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
     this.id = id;
@@ -19,6 +29,7 @@ public class ProductDTO {
     this.price = price;
     this.imgUrl = imgUrl;
   }
+  public ProductDTO() {}
 
   //Sobrecarga do construtor
   public ProductDTO(Product entity) {
