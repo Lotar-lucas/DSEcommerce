@@ -28,7 +28,8 @@ Quando o cliente acessa endpoints REST (ex: `/products`), o **ResourceServerConf
 - Disponibiliza no `SecurityContextHolder`
 
 ### 5. Controle de Acesso
-Atualmente todos endpoints permitem acesso de forma global (`permitAll()`), mas com `@EnableMethodSecurity` ativo, durante o desenvolvimento será colocado restrições em cada endpoint conforme necessário.
+Atualmente os endpoints relacionados a administrador CREATE, PUT, DELETE  tem restrições em cada endpoint conforme Regras(Role), 
+e o endpoint GET `/products` está aberto para todos (`permitAll()`).
 
 ## Further Considerations
 
@@ -40,16 +41,8 @@ Atualmente todos endpoints permitem acesso de forma global (`permitAll()`), mas 
 O Spring Security avalia qual `SecurityFilterChain` usar baseado nos matchers.
 
 ### Melhorias de segurança
-- Considerar trocar `permitAll()` por controle baseado em roles
-- Adicionar `@PreAuthorize("hasRole('ADMIN')")` em métodos sensíveis do `ProductController`
 - Implementar autorização granular por operação (GET, POST, PUT, DELETE)
 
-### Centralização
-- **Authorization Server** e **Resource Server** no mesmo projeto simplifica desenvolvimento
-- Em **produção**, considerar separar para:
-  - Melhor escalabilidade
-  - Segurança aprimorada
-  - Possibilidade de múltiplos Resource Servers
 
 ## Fluxo Visual
 
@@ -99,8 +92,8 @@ Cliente ← Resposta (200 OK ou 403 Forbidden)
 ```properties
 security.client-id=${CLIENT_ID:seu-client-id}
 security.client-secret=${CLIENT_SECRET:seu-client-secret}
-security.jwt.duration=${JWT_DURATION:86400}
-cors.origins=${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}
+security.jwt.duration=${JWT_DURATION:timepo-em-segundos}
+cors.origins=${CORS_ORIGINS:http://...}
 ```
 
 ### Endpoints OAuth2
