@@ -1,5 +1,8 @@
 package com.example.dscommerce.services;
 
+import com.example.dscommerce.dto.CategoryDTO;
+import com.example.dscommerce.dto.ProductMinDTO;
+import com.example.dscommerce.entities.Category;
 import com.example.dscommerce.entities.Product;
 import com.example.dscommerce.dto.ProductDTO;
 import com.example.dscommerce.repositories.ProductRepository;
@@ -30,9 +33,9 @@ public class ProductService {
   };
 
   @Transactional(readOnly = true)
-  public Page<ProductDTO> findAll(String name, Pageable pageable) {
+  public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
     Page<Product> result = productRepository.searchByName(name, pageable);
-    return  result.map(ProductDTO::new);
+    return  result.map(ProductMinDTO::new);
   };
 
   @Transactional
@@ -56,11 +59,17 @@ public class ProductService {
   }
 
   private void copyDtoToEntity(ProductDTO productDTO, Product entity) {
-
     entity.setName(productDTO.getName());
     entity.setDescription(productDTO.getDescription());
     entity.setPrice(productDTO.getPrice());
     entity.setImgUrl(productDTO.getImgUrl());
+
+    entity.getCategories().clear();
+    for (CategoryDTO categoryDTO : productDTO.getCategories()){
+      Category cat = new Category();
+      cat.setId(categoryDTO.getId());
+      entity.getCategories().add(cat);
+    }
   }
 
   @Transactional(propagation = Propagation.SUPPORTS)
