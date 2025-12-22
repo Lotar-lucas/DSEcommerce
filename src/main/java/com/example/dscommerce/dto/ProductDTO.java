@@ -4,6 +4,7 @@ import com.example.dscommerce.entities.Category;
 import com.example.dscommerce.entities.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
@@ -22,6 +23,7 @@ public class ProductDTO {
   @NotBlank(message = "Field description is required")
   private String description;
 
+  @NotNull(message = "Field price is required")
   @Positive(message = "Field price must be positive")
   private Double price;
   private String imgUrl;
