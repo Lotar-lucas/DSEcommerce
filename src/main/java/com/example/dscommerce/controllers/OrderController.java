@@ -2,7 +2,6 @@ package com.example.dscommerce.controllers;
 
 
 import com.example.dscommerce.dto.OrderDTO;
-import com.example.dscommerce.dto.ProductDTO;
 import com.example.dscommerce.services.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
