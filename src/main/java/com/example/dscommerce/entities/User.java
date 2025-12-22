@@ -104,6 +104,15 @@ public class User implements UserDetails {
     return roles;
   }
 
+  public boolean hasRole(String roleName) {
+    for (Role role : roles) {
+      if (role.getAuthority().equals(roleName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
   public String getUsername() {
     return email;
@@ -120,15 +129,6 @@ public class User implements UserDetails {
 
   public boolean addRole(Role role) {
     return roles.add(role);
-  }
-
-  public boolean hasRole(String roleName) {
-    for (Role role : roles) {
-      if (role.getAuthority().equals(roleName)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override
