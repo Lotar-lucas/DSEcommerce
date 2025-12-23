@@ -31,7 +31,7 @@ Quando o cliente acessa endpoints REST (ex: `/products`), o **ResourceServerConf
 Atualmente os endpoints relacionados a administrador CREATE, PUT, DELETE  tem restrições em cada endpoint conforme Regras(Role), 
 e o endpoint GET `/products` está aberto para todos (`permitAll()`).
 
-## Further Considerations
+## Outras Considerações
 
 ### Ordem de execução
 1. **H2 Console** (Order 1, perfil test)
@@ -98,8 +98,6 @@ cors.origins=${CORS_ORIGINS:http://...}
 
 ### Endpoints OAuth2
 - **Token endpoint**: `POST /oauth2/token`
-- **JWK Set**: `GET /.well-known/jwks.json`
-- **Authorization Server Metadata**: `GET /.well-known/oauth-authorization-server`
 
 ## Exemplo de Requisição de Token
 

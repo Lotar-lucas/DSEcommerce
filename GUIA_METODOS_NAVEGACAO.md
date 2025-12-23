@@ -26,10 +26,6 @@ Order order = orderRepository.findById(123L).get();
 List<Product> products = order.getProducts();
 // Resultado: [Notebook Dell, Mouse Logitech, Teclado Mecânico]
 
-// Usar no frontend
-for (Product p : products) {
-    System.out.println(p.getName());
-}
 ```
 
 **⚠️ Diferença importante:**
@@ -57,7 +53,7 @@ public List<Order> getOrders() {
 **💡 Exemplo prático:**
 ```java
 // Buscar produto "Notebook Dell"
-Product product = productRepository.findById(5L).get();
+Product product = productRepository.findById(id).get();
 
 // Obter todos os pedidos que contêm este produto
 List<Order> orders = product.getOrders();
@@ -69,25 +65,6 @@ for (Order order : orders) {
                        " - Cliente: " + order.getClient().getName() +
                        " - Data: " + order.getMoment());
 }
-```
-
-**📊 Casos de uso comuns:**
-```java
-// 1. Contar quantas vezes um produto foi vendido
-int totalVendas = product.getOrders().size();
-
-// 2. Listar clientes que compraram este produto
-List<User> compradores = product.getOrders()
-    .stream()
-    .map(order -> order.getClient())
-    .distinct()
-    .toList();
-
-// 3. Receita total de um produto (precisa dos items, não apenas orders)
-Double receitaTotal = product.getItems()
-    .stream()
-    .mapToDouble(item -> item.getPrice() * item.getQuantity())
-    .sum();
 ```
 
 ---
@@ -117,17 +94,6 @@ Navegação 2: Product → Order
 product.getItems()    → Set<OrderItem>  (com detalhes)
 product.getOrders()   → List<Order>     (apenas pedidos)
 ```
-
----
-
-## 🎯 Comparação Rápida
-
-| Método | Retorna | Com detalhes? | Quando usar |
-|--------|---------|---------------|-------------|
-| `order.getItems()` | `Set<OrderItem>` | ✅ Sim (quantity, price) | Preciso de quantidade e preço |
-| `order.getProducts()` | `List<Product>` | ❌ Não | Só quero lista de produtos |
-| `product.getItems()` | `Set<OrderItem>` | ✅ Sim (quantity, price) | Análise detalhada de vendas |
-| `product.getOrders()` | `List<Order>` | ❌ Não | Histórico de pedidos |
 
 ---
 
@@ -182,20 +148,5 @@ List<Product> produtosCaros = order.getItems()
     .toList();
 ```
 
----
 
-## 📝 Resumo Final
-
-| Pergunta | Método | Resposta |
-|----------|--------|----------|
-| Quais produtos estão no pedido #10? | `order.getProducts()` | Lista de Products |
-| Em quais pedidos o Notebook foi vendido? | `product.getOrders()` | Lista de Orders |
-| Quantos itens tem o pedido #10? | `order.getItems().size()` | Quantidade de itens |
-| Quantas vezes vendeu o Notebook? | `product.getOrders().size()` | Quantidade de pedidos |
-
----
-
-**🔖 SALVE ESTE ARQUIVO PARA CONSULTA RÁPIDA!**
-
-Sempre que precisar navegar entre Order e Product, consulte este guia.
 
