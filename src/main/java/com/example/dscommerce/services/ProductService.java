@@ -5,9 +5,11 @@ import com.example.dscommerce.dto.ProductMinDTO;
 import com.example.dscommerce.entities.Category;
 import com.example.dscommerce.entities.Product;
 import com.example.dscommerce.dto.ProductDTO;
+import com.example.dscommerce.repositories.CategoryRepository;
 import com.example.dscommerce.repositories.ProductRepository;
 import com.example.dscommerce.services.exceptions.DatabaseException;
 import com.example.dscommerce.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final CategoryRepository categoryRepository;
 
-  public ProductService(ProductRepository productRepository) {
+  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
+    this.categoryRepository = categoryRepository;
   }
 
   @Transactional(readOnly = true)
@@ -30,13 +34,13 @@ public class ProductService {
       ()-> new ResourceNotFoundException("Product not found")
     );
     return new ProductDTO(product);
-  };
+  }
 
   @Transactional(readOnly = true)
   public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
     Page<Product> result = productRepository.searchByName(name, pageable);
     return  result.map(ProductMinDTO::new);
-  };
+  }
 
   @Transactional
   public ProductDTO insert(ProductDTO productDTO) {
@@ -44,13 +48,14 @@ public class ProductService {
     copyDtoToEntity(productDTO, entity);
     entity = productRepository.save(entity);
     return new ProductDTO(entity);
-  };
+  }
 
   @Transactional
   public ProductDTO update(Long id, ProductDTO productDTO) {
     try {
       Product entity = productRepository.getReferenceById(id);
       copyDtoToEntity(productDTO, entity);
+
       entity = productRepository.save(entity);
       return new ProductDTO(entity);
     } catch (Exception e) {
@@ -66,8 +71,8 @@ public class ProductService {
 
     entity.getCategories().clear();
     for (CategoryDTO categoryDTO : productDTO.getCategories()){
-      Category cat = new Category();
-      cat.setId(categoryDTO.getId());
+      Category cat = categoryRepository.findById(categoryDTO.getId())
+        .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryDTO.getId()));
       entity.getCategories().add(cat);
     }
   }
