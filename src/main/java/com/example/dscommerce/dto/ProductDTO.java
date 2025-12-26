@@ -40,7 +40,6 @@ public class ProductDTO {
   }
   public ProductDTO() {}
 
-  //Sobrecarga do construtor
   public ProductDTO(Product entity) {
     id = entity.getId();
     name = entity.getName();
