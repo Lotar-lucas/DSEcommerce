@@ -1,0 +1,17 @@
+services:
+  pg-docker:
+    image: postgres:17-alpine
+    container_name: dev-DSCommerce-postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234567
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./.data/postgresql/data2:/var/lib/postgresql/data
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
